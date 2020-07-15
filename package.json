@@ -3,6 +3,8 @@
 	"displayName": "JSDoc Live Preview",
 	"description": "JSDoc Live Preview for VSCode",
 	"version": "1.0.0",
+	"publisher": "Perkovec",
+	"author": "Ilya Karpuk <perkovec24@gmail.com>",
 	"engines": {
 		"vscode": "^1.44.0"
 	},
