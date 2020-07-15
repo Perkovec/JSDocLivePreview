@@ -21,29 +21,27 @@ export class ShowPreviewCommand implements Command {
 		private readonly md: MarkdownIt
 	) { }
 
-	private getOrCreateWebviewPanel() {
-		if (!this.webviewPanel) {
-			const { activeTextEditor } = vscode.window;
-			const viewColumn = activeTextEditor && activeTextEditor.viewColumn ? activeTextEditor.viewColumn + 1 : vscode.ViewColumn.One;
-			const webviewPanel = vscode.window.createWebviewPanel(
-				this.viewType,
-				'JSDoc Live Preview',
-				viewColumn,
-				{
-					enableFindWidget: true,
-					enableScripts: true,
-					enableCommandUris: true,
-				}
-			);
+	private createWebviewPanel() {
+		if (this.webviewPanel) { return; }
 
-			webviewPanel.onDidDispose(() => {
-				this.webviewPanel = null;
-			}, null, this.context.subscriptions);
+		const { activeTextEditor } = vscode.window;
+		const viewColumn = activeTextEditor && activeTextEditor.viewColumn ? activeTextEditor.viewColumn + 1 : vscode.ViewColumn.One;
+		const webviewPanel = vscode.window.createWebviewPanel(
+			this.viewType,
+			'JSDoc Live Preview',
+			viewColumn,
+			{
+				enableFindWidget: true,
+				enableScripts: true,
+				enableCommandUris: true,
+			}
+		);
 
-			this.webviewPanel = webviewPanel;
-		}
+		webviewPanel.onDidDispose(() => {
+			this.webviewPanel = null;
+		}, null, this.context.subscriptions);
 
-		return this.webviewPanel;
+		this.webviewPanel = webviewPanel;
 	}
 
 	private async createTempFileFromEditor(editor: vscode.TextEditor): Promise<string> {
@@ -98,23 +96,28 @@ export class ShowPreviewCommand implements Command {
 	private async updatePreview(): Promise<void> {
 		const activeEditor = vscode.window.activeTextEditor;
 
-		if (!activeEditor) { return; }
+		if (!activeEditor || !this.webviewPanel) { return; }
 
-		const webviewPanel = this.getOrCreateWebviewPanel();
 		const tempFilePath = await this.createTempFileFromEditor(activeEditor);
 		const htmlDoc = await this.compileJSDoc(tempFilePath);
 
-		webviewPanel.webview.html = this.wrapHTMLContentInDoc(htmlDoc);
+		this.webviewPanel.webview.html = this.wrapHTMLContentInDoc(htmlDoc);
 	}
 
 	private registerEvents() {
 		const throttledUpdate = throttle(this.updatePreview.bind(this), 1000);
 		const debouncedUpdate = debounce(this.updatePreview.bind(this), 500);
-		vscode.workspace.onDidChangeTextDocument(() => { throttledUpdate(); debouncedUpdate(); });
-		vscode.window.onDidChangeActiveTextEditor(() => this.isSupportedFileOpened() && this.updatePreview());
+		this.context.subscriptions.push(
+			vscode.workspace.onDidChangeTextDocument(() => {
+				throttledUpdate();
+				debouncedUpdate();
+			}),
+			vscode.window.onDidChangeActiveTextEditor(() => this.isSupportedFileOpened() && this.updatePreview())
+		);
 	}
 
 	public execute() {
+		this.createWebviewPanel();
 		this.updatePreview();
 		this.registerEvents();
 	}
