@@ -1,0 +1,77 @@
+{
+	"name": "jsdoc-live-preview",
+	"displayName": "JSDoc Live Preview",
+	"description": "JSDoc Live Preview for VSCode",
+	"version": "1.0.0",
+	"engines": {
+		"vscode": "^1.44.0"
+	},
+	"icon": "icon.png",
+	"categories": [
+		"Other"
+	],
+	"keywords": [
+		"jsdoc",
+		"preview",
+		"live",
+		"command",
+		"markdown",
+		"documentation"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Perkovec/JSDocLivePreview.git"
+	},
+	"homepage": "https://github.com/Perkovec/JSDocLivePreview",
+	"bugs": {
+		"url": "https://github.com/Perkovec/JSDocLivePreview/issues"
+	},
+	"activationEvents": [
+		"onLanguage:js",
+		"onCommand:jsdocLivePreview.showPreview"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "jsdocLivePreview.showPreview",
+				"title": "JSDoc: Show Preview"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "jsdocLivePreview.showPreview",
+					"when": "editorLangId == javascript"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint src --ext ts",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/jsdoc-to-markdown": "^6.0.0",
+		"@types/markdown-it": "^10.0.1",
+		"@types/mocha": "^7.0.2",
+		"@types/node": "^13.11.0",
+		"@types/vscode": "^1.47.0",
+		"@typescript-eslint/eslint-plugin": "^2.30.0",
+		"@typescript-eslint/parser": "^2.30.0",
+		"eslint": "^6.8.0",
+		"glob": "^7.1.6",
+		"mocha": "^7.1.2",
+		"typescript": "^3.8.3",
+		"vscode-test": "^1.3.0"
+	},
+	"dependencies": {
+		"jsdoc-to-markdown": "^6.0.1",
+		"markdown-it": "^11.0.0"
+	}
+}
