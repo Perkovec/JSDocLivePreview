@@ -68,9 +68,9 @@ export class ShowPreviewCommand implements Command {
 	private wrapHTMLContentInDoc(content: string): string {
 		const { extensionPath } = this.context;
 
-		const githubMarkdownCss = vscode.Uri.file(path.join(extensionPath, 'src/assets/github-markdown.css')).with({ scheme: 'vscode-resource' });
-		const globalCss = vscode.Uri.file(path.join(extensionPath, 'src/assets/global.css')).with({ scheme: 'vscode-resource' });
-		const anchorJs = vscode.Uri.file(path.join(extensionPath, 'src/assets/anchors.js')).with({ scheme: 'vscode-resource' });
+		const githubMarkdownCss = vscode.Uri.file(path.join(extensionPath, 'assets/github-markdown.css')).with({ scheme: 'vscode-resource' });
+		const globalCss = vscode.Uri.file(path.join(extensionPath, 'assets/global.css')).with({ scheme: 'vscode-resource' });
+		const anchorJs = vscode.Uri.file(path.join(extensionPath, 'assets/anchors.js')).with({ scheme: 'vscode-resource' });
 
 		return `
 			<!DOCTYPE html>

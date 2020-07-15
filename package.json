@@ -2,7 +2,7 @@
 	"name": "jsdoc-live-preview",
 	"displayName": "JSDoc Live Preview",
 	"description": "JSDoc Live Preview for VSCode",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"publisher": "Perkovec",
 	"author": "Ilya Karpuk <perkovec24@gmail.com>",
 	"engines": {
